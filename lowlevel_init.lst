@@ -1,0 +1,13 @@
+
+lowlevel_init.o:     file format elf32-littlearm
+
+
+Disassembly of section .text:
+
+00000000 <lowlevel_init>:
+   0:	e24dd0c0 	sub	sp, sp, #192	; 0xc0
+   4:	e3cdd007 	bic	sp, sp, #7
+   8:	e1a0900d 	mov	r9, sp
+   c:	e92d5000 	push	{ip, lr}
+  10:	ebfffffe 	bl	0 <s_init>
+  14:	e8bd9000 	pop	{ip, pc}

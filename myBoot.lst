@@ -1,0 +1,555 @@
+
+myBoot.o:     file format elf32-littlearm
+
+
+Disassembly of section .text:
+
+ffff0000 <__image_copy_start>:
+ffff0000:	ea00000f 	b	ffff0044 <reset>
+ffff0004:	e59ff014 	ldr	pc, [pc, #20]	; ffff0020 <_undefined_instruction>
+ffff0008:	e59ff014 	ldr	pc, [pc, #20]	; ffff0024 <_software_interrupt>
+ffff000c:	e59ff014 	ldr	pc, [pc, #20]	; ffff0028 <_prefetch_abort>
+ffff0010:	e59ff014 	ldr	pc, [pc, #20]	; ffff002c <_data_abort>
+ffff0014:	e59ff014 	ldr	pc, [pc, #20]	; ffff0030 <_not_used>
+ffff0018:	e59ff014 	ldr	pc, [pc, #20]	; ffff0034 <_irq>
+ffff001c:	e59ff014 	ldr	pc, [pc, #20]	; ffff0038 <_fiq>
+
+ffff0020 <_undefined_instruction>:
+ffff0020:	ffff0040 	.word	0xffff0040
+
+ffff0024 <_software_interrupt>:
+ffff0024:	ffff0040 	.word	0xffff0040
+
+ffff0028 <_prefetch_abort>:
+ffff0028:	ffff0040 	.word	0xffff0040
+
+ffff002c <_data_abort>:
+ffff002c:	ffff0040 	.word	0xffff0040
+
+ffff0030 <_not_used>:
+ffff0030:	ffff0040 	.word	0xffff0040
+
+ffff0034 <_irq>:
+ffff0034:	ffff0040 	.word	0xffff0040
+
+ffff0038 <_fiq>:
+ffff0038:	ffff0040 	.word	0xffff0040
+ffff003c:	deadbeef 	.word	0xdeadbeef
+
+ffff0040 <data_abort>:
+ffff0040:	ebfffffe 	bl	ffff0040 <data_abort>
+
+ffff0044 <reset>:
+ffff0044:	e10f0000 	mrs	r0, CPSR
+ffff0048:	e200101f 	and	r1, r0, #31
+ffff004c:	e331001a 	teq	r1, #26
+ffff0050:	13c0001f 	bicne	r0, r0, #31
+ffff0054:	13800013 	orrne	r0, r0, #19
+ffff0058:	e38000c0 	orr	r0, r0, #192	; 0xc0
+ffff005c:	e129f000 	msr	CPSR_fc, r0
+ffff0060:	ee110f10 	mrc	15, 0, r0, cr1, cr0, {0}
+ffff0064:	e3c00a02 	bic	r0, r0, #8192	; 0x2000
+ffff0068:	ee010f10 	mcr	15, 0, r0, cr1, cr0, {0}
+ffff006c:	e59f0094 	ldr	r0, [pc, #148]	; ffff0108 <cpu_init_crit+0x14>
+ffff0070:	ee0c0f10 	mcr	15, 0, r0, cr12, cr0, {0}
+ffff0074:	eb000006 	bl	ffff0094 <cpu_init_cp15>
+ffff0078:	eb00001d 	bl	ffff00f4 <cpu_init_crit>
+ffff007c:	fa0000be 	blx	ffff037c <board_init_f>
+ffff0080:	ee070f15 	mcr	15, 0, r0, cr7, cr5, {0}
+ffff0084:	ee070f9a 	mcr	15, 0, r0, cr7, cr10, {4}
+ffff0088:	ee070f95 	mcr	15, 0, r0, cr7, cr5, {4}
+ffff008c:	e12fff1e 	bx	lr
+ffff0090:	eaffffeb 	b	ffff0044 <reset>
+
+ffff0094 <cpu_init_cp15>:
+ffff0094:	e1a00000 	nop			; (mov r0, r0)
+ffff0098:	e1a00000 	nop			; (mov r0, r0)
+ffff009c:	e1a00000 	nop			; (mov r0, r0)
+ffff00a0:	e3a00000 	mov	r0, #0
+ffff00a4:	ee080f17 	mcr	15, 0, r0, cr8, cr7, {0}
+ffff00a8:	ee070f15 	mcr	15, 0, r0, cr7, cr5, {0}
+ffff00ac:	ee070fd5 	mcr	15, 0, r0, cr7, cr5, {6}
+ffff00b0:	ee070f9a 	mcr	15, 0, r0, cr7, cr10, {4}
+ffff00b4:	ee070f95 	mcr	15, 0, r0, cr7, cr5, {4}
+ffff00b8:	ee110f10 	mrc	15, 0, r0, cr1, cr0, {0}
+ffff00bc:	e3c00a02 	bic	r0, r0, #8192	; 0x2000
+ffff00c0:	e3c00007 	bic	r0, r0, #7
+ffff00c4:	e3800002 	orr	r0, r0, #2
+ffff00c8:	e3800b02 	orr	r0, r0, #2048	; 0x800
+ffff00cc:	e3800a01 	orr	r0, r0, #4096	; 0x1000
+ffff00d0:	ee010f10 	mcr	15, 0, r0, cr1, cr0, {0}
+ffff00d4:	e1a0500e 	mov	r5, lr
+ffff00d8:	ee101f10 	mrc	15, 0, r1, cr0, cr0, {0}
+ffff00dc:	e1a03a21 	lsr	r3, r1, #20
+ffff00e0:	e203300f 	and	r3, r3, #15
+ffff00e4:	e201400f 	and	r4, r1, #15
+ffff00e8:	e1a02203 	lsl	r2, r3, #4
+ffff00ec:	e1842002 	orr	r2, r4, r2
+ffff00f0:	e1a0f005 	mov	pc, r5
+
+ffff00f4 <cpu_init_crit>:
+ffff00f4:	e1a00000 	nop			; (mov r0, r0)
+ffff00f8:	e1a00000 	nop			; (mov r0, r0)
+ffff00fc:	e1a00000 	nop			; (mov r0, r0)
+ffff0100:	ea000001 	b	ffff010c <lowlevel_init>
+ffff0104:	e12fff1e 	bx	lr
+ffff0108:	ffff0000 	.word	0xffff0000
+
+ffff010c <lowlevel_init>:
+ffff010c:	e24dd0c0 	sub	sp, sp, #192	; 0xc0
+ffff0110:	e3cdd007 	bic	sp, sp, #7
+ffff0114:	e1a0900d 	mov	r9, sp
+ffff0118:	e92d5000 	push	{ip, lr}
+ffff011c:	fa000000 	blx	ffff0124 <s_init>
+ffff0120:	e8bd9000 	pop	{ip, pc}
+
+ffff0124 <s_init>:
+ffff0124:	4770      	bx	lr
+
+ffff0126 <udelay>:
+ffff0126:	4770      	bx	lr
+
+ffff0128 <cm_get_osc_clk_hz>:
+ffff0128:	3801      	subs	r0, #1
+ffff012a:	2802      	cmp	r0, #2
+ffff012c:	4801      	ldr	r0, [pc, #4]	; (ffff0134 <cm_get_osc_clk_hz+0xc>)
+ffff012e:	bf28      	it	cs
+ffff0130:	2000      	movcs	r0, #0
+ffff0132:	4770      	bx	lr
+ffff0134:	017d7840 	.word	0x017d7840
+
+ffff0138 <cm_get_default_config>:
+ffff0138:	4770      	bx	lr
+	...
+
+ffff013c <sys_mgr_frzctrl_freeze_req>:
+ffff013c:	f3bf 8f5f 	dmb	sy
+ffff0140:	4b19      	ldr	r3, [pc, #100]	; (ffff01a8 <sys_mgr_frzctrl_freeze_req+0x6c>)
+ffff0142:	2200      	movs	r2, #0
+ffff0144:	655a      	str	r2, [r3, #84]	; 0x54
+ffff0146:	6c1a      	ldr	r2, [r3, #64]	; 0x40
+ffff0148:	f022 021c 	bic.w	r2, r2, #28
+ffff014c:	641a      	str	r2, [r3, #64]	; 0x40
+ffff014e:	6c1a      	ldr	r2, [r3, #64]	; 0x40
+ffff0150:	f022 0203 	bic.w	r2, r2, #3
+ffff0154:	641a      	str	r2, [r3, #64]	; 0x40
+ffff0156:	6c5a      	ldr	r2, [r3, #68]	; 0x44
+ffff0158:	f022 021c 	bic.w	r2, r2, #28
+ffff015c:	645a      	str	r2, [r3, #68]	; 0x44
+ffff015e:	6c5a      	ldr	r2, [r3, #68]	; 0x44
+ffff0160:	f022 0203 	bic.w	r2, r2, #3
+ffff0164:	645a      	str	r2, [r3, #68]	; 0x44
+ffff0166:	6c9a      	ldr	r2, [r3, #72]	; 0x48
+ffff0168:	f022 021c 	bic.w	r2, r2, #28
+ffff016c:	649a      	str	r2, [r3, #72]	; 0x48
+ffff016e:	6c9a      	ldr	r2, [r3, #72]	; 0x48
+ffff0170:	f022 0203 	bic.w	r2, r2, #3
+ffff0174:	649a      	str	r2, [r3, #72]	; 0x48
+ffff0176:	6d1a      	ldr	r2, [r3, #80]	; 0x50
+ffff0178:	f022 021c 	bic.w	r2, r2, #28
+ffff017c:	651a      	str	r2, [r3, #80]	; 0x50
+ffff017e:	6d1a      	ldr	r2, [r3, #80]	; 0x50
+ffff0180:	f3bf 8f5f 	dmb	sy
+ffff0184:	f022 0203 	bic.w	r2, r2, #3
+ffff0188:	f042 02c0 	orr.w	r2, r2, #192	; 0xc0
+ffff018c:	f3bf 8f5f 	dmb	sy
+ffff0190:	651a      	str	r2, [r3, #80]	; 0x50
+ffff0192:	6d1a      	ldr	r2, [r3, #80]	; 0x50
+ffff0194:	f3bf 8f5f 	dmb	sy
+ffff0198:	f422 7290 	bic.w	r2, r2, #288	; 0x120
+ffff019c:	f042 0220 	orr.w	r2, r2, #32
+ffff01a0:	f3bf 8f5f 	dmb	sy
+ffff01a4:	651a      	str	r2, [r3, #80]	; 0x50
+ffff01a6:	4770      	bx	lr
+ffff01a8:	ffd08000 	.word	0xffd08000
+
+ffff01ac <sys_mgr_frzctrl_thaw_req>:
+ffff01ac:	f3bf 8f5f 	dmb	sy
+ffff01b0:	4b19      	ldr	r3, [pc, #100]	; (ffff0218 <sys_mgr_frzctrl_thaw_req+0x6c>)
+ffff01b2:	2200      	movs	r2, #0
+ffff01b4:	4919      	ldr	r1, [pc, #100]	; (ffff021c <sys_mgr_frzctrl_thaw_req+0x70>)
+ffff01b6:	3340      	adds	r3, #64	; 0x40
+ffff01b8:	615a      	str	r2, [r3, #20]
+ffff01ba:	681a      	ldr	r2, [r3, #0]
+ffff01bc:	f042 0203 	orr.w	r2, r2, #3
+ffff01c0:	601a      	str	r2, [r3, #0]
+ffff01c2:	681a      	ldr	r2, [r3, #0]
+ffff01c4:	f042 020c 	orr.w	r2, r2, #12
+ffff01c8:	601a      	str	r2, [r3, #0]
+ffff01ca:	681a      	ldr	r2, [r3, #0]
+ffff01cc:	f042 0210 	orr.w	r2, r2, #16
+ffff01d0:	f843 2b04 	str.w	r2, [r3], #4
+ffff01d4:	428b      	cmp	r3, r1
+ffff01d6:	d1f0      	bne.n	ffff01ba <sys_mgr_frzctrl_thaw_req+0xe>
+ffff01d8:	4b0f      	ldr	r3, [pc, #60]	; (ffff0218 <sys_mgr_frzctrl_thaw_req+0x6c>)
+ffff01da:	6d1a      	ldr	r2, [r3, #80]	; 0x50
+ffff01dc:	f022 0220 	bic.w	r2, r2, #32
+ffff01e0:	651a      	str	r2, [r3, #80]	; 0x50
+ffff01e2:	6d1a      	ldr	r2, [r3, #80]	; 0x50
+ffff01e4:	f442 7280 	orr.w	r2, r2, #256	; 0x100
+ffff01e8:	651a      	str	r2, [r3, #80]	; 0x50
+ffff01ea:	6d1a      	ldr	r2, [r3, #80]	; 0x50
+ffff01ec:	f3bf 8f5f 	dmb	sy
+ffff01f0:	f022 0243 	bic.w	r2, r2, #67	; 0x43
+ffff01f4:	f042 0203 	orr.w	r2, r2, #3
+ffff01f8:	f3bf 8f5f 	dmb	sy
+ffff01fc:	651a      	str	r2, [r3, #80]	; 0x50
+ffff01fe:	6d1a      	ldr	r2, [r3, #80]	; 0x50
+ffff0200:	f042 020c 	orr.w	r2, r2, #12
+ffff0204:	651a      	str	r2, [r3, #80]	; 0x50
+ffff0206:	6d1a      	ldr	r2, [r3, #80]	; 0x50
+ffff0208:	f022 0280 	bic.w	r2, r2, #128	; 0x80
+ffff020c:	651a      	str	r2, [r3, #80]	; 0x50
+ffff020e:	6d1a      	ldr	r2, [r3, #80]	; 0x50
+ffff0210:	f042 0210 	orr.w	r2, r2, #16
+ffff0214:	651a      	str	r2, [r3, #80]	; 0x50
+ffff0216:	4770      	bx	lr
+ffff0218:	ffd08000 	.word	0xffd08000
+ffff021c:	ffd0804c 	.word	0xffd0804c
+
+ffff0220 <socfpga_per_reset_all>:
+ffff0220:	f3bf 8f5f 	dmb	sy
+ffff0224:	4b04      	ldr	r3, [pc, #16]	; (ffff0238 <socfpga_per_reset_all+0x18>)
+ffff0226:	f06f 0240 	mvn.w	r2, #64	; 0x40
+ffff022a:	615a      	str	r2, [r3, #20]
+ffff022c:	f3bf 8f5f 	dmb	sy
+ffff0230:	f04f 32ff 	mov.w	r2, #4294967295
+ffff0234:	619a      	str	r2, [r3, #24]
+ffff0236:	4770      	bx	lr
+ffff0238:	ffd05000 	.word	0xffd05000
+
+ffff023c <socfpga_per_reset>:
+ffff023c:	f3c0 2302 	ubfx	r3, r0, #8, #3
+ffff0240:	f410 6fe0 	tst.w	r0, #1792	; 0x700
+ffff0244:	d10a      	bne.n	ffff025c <socfpga_per_reset+0x20>
+ffff0246:	4b0f      	ldr	r3, [pc, #60]	; (ffff0284 <socfpga_per_reset+0x48>)
+ffff0248:	f000 001f 	and.w	r0, r0, #31
+ffff024c:	2201      	movs	r2, #1
+ffff024e:	fa02 f000 	lsl.w	r0, r2, r0
+ffff0252:	681a      	ldr	r2, [r3, #0]
+ffff0254:	b191      	cbz	r1, ffff027c <socfpga_per_reset+0x40>
+ffff0256:	4310      	orrs	r0, r2
+ffff0258:	6018      	str	r0, [r3, #0]
+ffff025a:	4770      	bx	lr
+ffff025c:	2b01      	cmp	r3, #1
+ffff025e:	d101      	bne.n	ffff0264 <socfpga_per_reset+0x28>
+ffff0260:	4b09      	ldr	r3, [pc, #36]	; (ffff0288 <socfpga_per_reset+0x4c>)
+ffff0262:	e7f1      	b.n	ffff0248 <socfpga_per_reset+0xc>
+ffff0264:	2b02      	cmp	r3, #2
+ffff0266:	d101      	bne.n	ffff026c <socfpga_per_reset+0x30>
+ffff0268:	4b08      	ldr	r3, [pc, #32]	; (ffff028c <socfpga_per_reset+0x50>)
+ffff026a:	e7ed      	b.n	ffff0248 <socfpga_per_reset+0xc>
+ffff026c:	2b03      	cmp	r3, #3
+ffff026e:	d101      	bne.n	ffff0274 <socfpga_per_reset+0x38>
+ffff0270:	4b07      	ldr	r3, [pc, #28]	; (ffff0290 <socfpga_per_reset+0x54>)
+ffff0272:	e7e9      	b.n	ffff0248 <socfpga_per_reset+0xc>
+ffff0274:	2b04      	cmp	r3, #4
+ffff0276:	d1f0      	bne.n	ffff025a <socfpga_per_reset+0x1e>
+ffff0278:	4b06      	ldr	r3, [pc, #24]	; (ffff0294 <socfpga_per_reset+0x58>)
+ffff027a:	e7e5      	b.n	ffff0248 <socfpga_per_reset+0xc>
+ffff027c:	ea22 0000 	bic.w	r0, r2, r0
+ffff0280:	e7ea      	b.n	ffff0258 <socfpga_per_reset+0x1c>
+ffff0282:	bf00      	nop
+ffff0284:	ffd05010 	.word	0xffd05010
+ffff0288:	ffd05014 	.word	0xffd05014
+ffff028c:	ffd05018 	.word	0xffd05018
+ffff0290:	ffd0501c 	.word	0xffd0501c
+ffff0294:	ffd05020 	.word	0xffd05020
+
+ffff0298 <fpgamgr_get_mode>:
+ffff0298:	4b03      	ldr	r3, [pc, #12]	; (ffff02a8 <fpgamgr_get_mode+0x10>)
+ffff029a:	6818      	ldr	r0, [r3, #0]
+ffff029c:	f3bf 8f5f 	dmb	sy
+ffff02a0:	f000 0007 	and.w	r0, r0, #7
+ffff02a4:	4770      	bx	lr
+ffff02a6:	bf00      	nop
+ffff02a8:	ff706000 	.word	0xff706000
+
+ffff02ac <fpgamgr_test_fpga_ready>:
+ffff02ac:	b508      	push	{r3, lr}
+ffff02ae:	4b0a      	ldr	r3, [pc, #40]	; (ffff02d8 <fpgamgr_test_fpga_ready+0x2c>)
+ffff02b0:	f8d3 2850 	ldr.w	r2, [r3, #2128]	; 0x850
+ffff02b4:	f3bf 8f5f 	dmb	sy
+ffff02b8:	0751      	lsls	r1, r2, #29
+ffff02ba:	d401      	bmi.n	ffff02c0 <fpgamgr_test_fpga_ready+0x14>
+ffff02bc:	2000      	movs	r0, #0
+ffff02be:	bd08      	pop	{r3, pc}
+ffff02c0:	f8d3 3850 	ldr.w	r3, [r3, #2128]	; 0x850
+ffff02c4:	f3bf 8f5f 	dmb	sy
+ffff02c8:	075a      	lsls	r2, r3, #29
+ffff02ca:	d5f7      	bpl.n	ffff02bc <fpgamgr_test_fpga_ready+0x10>
+ffff02cc:	f7ff ffe4 	bl	ffff0298 <fpgamgr_get_mode>
+ffff02d0:	1f03      	subs	r3, r0, #4
+ffff02d2:	4258      	negs	r0, r3
+ffff02d4:	4158      	adcs	r0, r3
+ffff02d6:	e7f2      	b.n	ffff02be <fpgamgr_test_fpga_ready+0x12>
+ffff02d8:	ff706000 	.word	0xff706000
+
+ffff02dc <socfpga_bridges_reset>:
+ffff02dc:	b538      	push	{r3, r4, r5, lr}
+ffff02de:	4604      	mov	r4, r0
+ffff02e0:	b130      	cbz	r0, ffff02f0 <socfpga_bridges_reset+0x14>
+ffff02e2:	f3bf 8f5f 	dmb	sy
+ffff02e6:	4b0e      	ldr	r3, [pc, #56]	; (ffff0320 <socfpga_bridges_reset+0x44>)
+ffff02e8:	f04f 32ff 	mov.w	r2, #4294967295
+ffff02ec:	61da      	str	r2, [r3, #28]
+ffff02ee:	bd38      	pop	{r3, r4, r5, pc}
+ffff02f0:	f3bf 8f5f 	dmb	sy
+ffff02f4:	4b0b      	ldr	r3, [pc, #44]	; (ffff0324 <socfpga_bridges_reset+0x48>)
+ffff02f6:	f8c3 0080 	str.w	r0, [r3, #128]	; 0x80
+ffff02fa:	f3bf 8f5f 	dmb	sy
+ffff02fe:	2519      	movs	r5, #25
+ffff0300:	f8c3 5084 	str.w	r5, [r3, #132]	; 0x84
+ffff0304:	f7ff ffd2 	bl	ffff02ac <fpgamgr_test_fpga_ready>
+ffff0308:	2800      	cmp	r0, #0
+ffff030a:	d0f0      	beq.n	ffff02ee <socfpga_bridges_reset+0x12>
+ffff030c:	f3bf 8f5f 	dmb	sy
+ffff0310:	4b03      	ldr	r3, [pc, #12]	; (ffff0320 <socfpga_bridges_reset+0x44>)
+ffff0312:	61dc      	str	r4, [r3, #28]
+ffff0314:	f3bf 8f5f 	dmb	sy
+ffff0318:	4b03      	ldr	r3, [pc, #12]	; (ffff0328 <socfpga_bridges_reset+0x4c>)
+ffff031a:	601d      	str	r5, [r3, #0]
+ffff031c:	e7e7      	b.n	ffff02ee <socfpga_bridges_reset+0x12>
+ffff031e:	bf00      	nop
+ffff0320:	ffd05000 	.word	0xffd05000
+ffff0324:	ffd08000 	.word	0xffd08000
+ffff0328:	ff800000 	.word	0xff800000
+
+ffff032c <timer_init>:
+ffff032c:	f3bf 8f5f 	dmb	sy
+ffff0330:	4b08      	ldr	r3, [pc, #32]	; (ffff0354 <timer_init+0x28>)
+ffff0332:	f04f 32ff 	mov.w	r2, #4294967295
+ffff0336:	601a      	str	r2, [r3, #0]
+ffff0338:	f3bf 8f5f 	dmb	sy
+ffff033c:	605a      	str	r2, [r3, #4]
+ffff033e:	689a      	ldr	r2, [r3, #8]
+ffff0340:	f3bf 8f5f 	dmb	sy
+ffff0344:	f042 0203 	orr.w	r2, r2, #3
+ffff0348:	f3bf 8f5f 	dmb	sy
+ffff034c:	2000      	movs	r0, #0
+ffff034e:	609a      	str	r2, [r3, #8]
+ffff0350:	4770      	bx	lr
+ffff0352:	bf00      	nop
+ffff0354:	ffd00000 	.word	0xffd00000
+
+ffff0358 <hang>:
+ffff0358:	e7fe      	b.n	ffff0358 <hang>
+
+ffff035a <cm_basic_init>:
+ffff035a:	4770      	bx	lr
+
+ffff035c <sysmgr_config_warmrstcfgio>:
+ffff035c:	4770      	bx	lr
+
+ffff035e <scan_mgr_configure_iocsr>:
+ffff035e:	4770      	bx	lr
+
+ffff0360 <sysmgr_pinmux_init>:
+ffff0360:	4770      	bx	lr
+
+ffff0362 <sdram_mmr_init_full>:
+ffff0362:	4770      	bx	lr
+
+ffff0364 <sdram_calibration_full>:
+ffff0364:	2000      	movs	r0, #0
+ffff0366:	4770      	bx	lr
+
+ffff0368 <sdram_calculate_size>:
+ffff0368:	4770      	bx	lr
+
+ffff036a <get_ram_size>:
+ffff036a:	4770      	bx	lr
+
+ffff036c <reset_deassert_peripherals_handoff>:
+ffff036c:	f3bf 8f5f 	dmb	sy
+ffff0370:	4b01      	ldr	r3, [pc, #4]	; (ffff0378 <reset_deassert_peripherals_handoff+0xc>)
+ffff0372:	2200      	movs	r2, #0
+ffff0374:	615a      	str	r2, [r3, #20]
+ffff0376:	4770      	bx	lr
+ffff0378:	ffd05000 	.word	0xffd05000
+
+ffff037c <board_init_f>:
+ffff037c:	b508      	push	{r3, lr}
+ffff037e:	4b2d      	ldr	r3, [pc, #180]	; (ffff0434 <board_init_f+0xb8>)
+ffff0380:	f8d3 2144 	ldr.w	r2, [r3, #324]	; 0x144
+ffff0384:	f3bf 8f5f 	dmb	sy
+ffff0388:	0711      	lsls	r1, r2, #28
+ffff038a:	d504      	bpl.n	ffff0396 <board_init_f+0x1a>
+ffff038c:	f3bf 8f5f 	dmb	sy
+ffff0390:	2109      	movs	r1, #9
+ffff0392:	f8c3 1144 	str.w	r1, [r3, #324]	; 0x144
+ffff0396:	06d2      	lsls	r2, r2, #27
+ffff0398:	d504      	bpl.n	ffff03a4 <board_init_f+0x28>
+ffff039a:	f3bf 8f5f 	dmb	sy
+ffff039e:	2211      	movs	r2, #17
+ffff03a0:	f8c3 2144 	str.w	r2, [r3, #324]	; 0x144
+ffff03a4:	f3bf 8f5f 	dmb	sy
+ffff03a8:	4b23      	ldr	r3, [pc, #140]	; (ffff0438 <board_init_f+0xbc>)
+ffff03aa:	2001      	movs	r0, #1
+ffff03ac:	6218      	str	r0, [r3, #32]
+ffff03ae:	f3bf 8f5f 	dmb	sy
+ffff03b2:	f8c3 0090 	str.w	r0, [r3, #144]	; 0x90
+ffff03b6:	f3bf 8f5f 	dmb	sy
+ffff03ba:	f8c3 0094 	str.w	r0, [r3, #148]	; 0x94
+ffff03be:	f3bf 8f5f 	dmb	sy
+ffff03c2:	f8c3 0098 	str.w	r0, [r3, #152]	; 0x98
+ffff03c6:	f3bf 8f5f 	dmb	sy
+ffff03ca:	f8c3 009c 	str.w	r0, [r3, #156]	; 0x9c
+ffff03ce:	f3bf 8f5f 	dmb	sy
+ffff03d2:	491a      	ldr	r1, [pc, #104]	; (ffff043c <board_init_f+0xc0>)
+ffff03d4:	f8c3 00a0 	str.w	r0, [r3, #160]	; 0xa0
+ffff03d8:	6d4a      	ldr	r2, [r1, #84]	; 0x54
+ffff03da:	ea6f 3212 	mvn.w	r2, r2, lsr #12
+ffff03de:	ea6f 3202 	mvn.w	r2, r2, lsl #12
+ffff03e2:	654a      	str	r2, [r1, #84]	; 0x54
+ffff03e4:	f3bf 8f5f 	dmb	sy
+ffff03e8:	6018      	str	r0, [r3, #0]
+ffff03ea:	f3bf 8f5f 	dmb	sy
+ffff03ee:	4b14      	ldr	r3, [pc, #80]	; (ffff0440 <board_init_f+0xc4>)
+ffff03f0:	f8c3 0c00 	str.w	r0, [r3, #3072]	; 0xc00
+ffff03f4:	f7ff fea2 	bl	ffff013c <sys_mgr_frzctrl_freeze_req>
+ffff03f8:	f7ff ff12 	bl	ffff0220 <socfpga_per_reset_all>
+ffff03fc:	f7ff ff6e 	bl	ffff02dc <socfpga_bridges_reset>
+ffff0400:	2100      	movs	r1, #0
+ffff0402:	f240 101d 	movw	r0, #285	; 0x11d
+ffff0406:	f7ff ff19 	bl	ffff023c <socfpga_per_reset>
+ffff040a:	f44f 7088 	mov.w	r0, #272	; 0x110
+ffff040e:	f7ff ff15 	bl	ffff023c <socfpga_per_reset>
+ffff0412:	f44f 7084 	mov.w	r0, #264	; 0x108
+ffff0416:	f7ff ff11 	bl	ffff023c <socfpga_per_reset>
+ffff041a:	f7ff ff87 	bl	ffff032c <timer_init>
+ffff041e:	4608      	mov	r0, r1
+ffff0420:	f7ff ffa4 	bl	ffff036c <reset_deassert_peripherals_handoff>
+ffff0424:	f7ff ff5a 	bl	ffff02dc <socfpga_bridges_reset>
+ffff0428:	f7ff fec0 	bl	ffff01ac <sys_mgr_frzctrl_thaw_req>
+ffff042c:	f000 f854 	bl	ffff04d8 <preloader_console_init>
+ffff0430:	e7fe      	b.n	ffff0430 <board_init_f+0xb4>
+ffff0432:	bf00      	nop
+ffff0434:	ffd08000 	.word	0xffd08000
+ffff0438:	ff800000 	.word	0xff800000
+ffff043c:	fffec000 	.word	0xfffec000
+ffff0440:	fffef000 	.word	0xfffef000
+
+ffff0444 <Console_putc>:
+ffff0444:	4b02      	ldr	r3, [pc, #8]	; (ffff0450 <Console_putc+0xc>)
+ffff0446:	695a      	ldr	r2, [r3, #20]
+ffff0448:	0692      	lsls	r2, r2, #26
+ffff044a:	d5fc      	bpl.n	ffff0446 <Console_putc+0x2>
+ffff044c:	6018      	str	r0, [r3, #0]
+ffff044e:	4770      	bx	lr
+ffff0450:	ffc02000 	.word	0xffc02000
+
+ffff0454 <Console_puts>:
+ffff0454:	1e41      	subs	r1, r0, #1
+ffff0456:	b508      	push	{r3, lr}
+ffff0458:	f811 0f01 	ldrb.w	r0, [r1, #1]!
+ffff045c:	b900      	cbnz	r0, ffff0460 <Console_puts+0xc>
+ffff045e:	bd08      	pop	{r3, pc}
+ffff0460:	f7ff fff0 	bl	ffff0444 <Console_putc>
+ffff0464:	e7f8      	b.n	ffff0458 <Console_puts+0x4>
+	...
+
+ffff0468 <board_init_r>:
+ffff0468:	e92d 41f3 	stmdb	sp!, {r0, r1, r4, r5, r6, r7, r8, lr}
+ffff046c:	2101      	movs	r1, #1
+ffff046e:	4e17      	ldr	r6, [pc, #92]	; (ffff04cc <board_init_r+0x64>)
+ffff0470:	f44f 7083 	mov.w	r0, #262	; 0x106
+ffff0474:	f8df 8058 	ldr.w	r8, [pc, #88]	; ffff04d0 <board_init_r+0x68>
+ffff0478:	f7ff fee0 	bl	ffff023c <socfpga_per_reset>
+ffff047c:	2100      	movs	r1, #0
+ffff047e:	f44f 7083 	mov.w	r0, #262	; 0x106
+ffff0482:	f04f 7780 	mov.w	r7, #16777216	; 0x1000000
+ffff0486:	f7ff fed9 	bl	ffff023c <socfpga_per_reset>
+ffff048a:	f04f 33ff 	mov.w	r3, #4294967295
+ffff048e:	6073      	str	r3, [r6, #4]
+ffff0490:	2400      	movs	r4, #0
+ffff0492:	4b10      	ldr	r3, [pc, #64]	; (ffff04d4 <board_init_r+0x6c>)
+ffff0494:	2501      	movs	r5, #1
+ffff0496:	6037      	str	r7, [r6, #0]
+ffff0498:	9301      	str	r3, [sp, #4]
+ffff049a:	f104 0308 	add.w	r3, r4, #8
+ffff049e:	446b      	add	r3, sp
+ffff04a0:	f813 0c04 	ldrb.w	r0, [r3, #-4]
+ffff04a4:	f7ff ffce 	bl	ffff0444 <Console_putc>
+ffff04a8:	4640      	mov	r0, r8
+ffff04aa:	f7ff fe3c 	bl	ffff0126 <udelay>
+ffff04ae:	b14d      	cbz	r5, ffff04c4 <board_init_r+0x5c>
+ffff04b0:	2500      	movs	r5, #0
+ffff04b2:	6035      	str	r5, [r6, #0]
+ffff04b4:	3401      	adds	r4, #1
+ffff04b6:	2008      	movs	r0, #8
+ffff04b8:	2c04      	cmp	r4, #4
+ffff04ba:	bfa8      	it	ge
+ffff04bc:	2400      	movge	r4, #0
+ffff04be:	f7ff ffc1 	bl	ffff0444 <Console_putc>
+ffff04c2:	e7ea      	b.n	ffff049a <board_init_r+0x32>
+ffff04c4:	6037      	str	r7, [r6, #0]
+ffff04c6:	2501      	movs	r5, #1
+ffff04c8:	e7f4      	b.n	ffff04b4 <board_init_r+0x4c>
+ffff04ca:	bf00      	nop
+ffff04cc:	ff709000 	.word	0xff709000
+ffff04d0:	0007a120 	.word	0x0007a120
+ffff04d4:	5c7c2f2d 	.word	0x5c7c2f2d
+
+ffff04d8 <preloader_console_init>:
+ffff04d8:	4b1e      	ldr	r3, [pc, #120]	; (ffff0554 <preloader_console_init+0x7c>)
+ffff04da:	2100      	movs	r1, #0
+ffff04dc:	b510      	push	{r4, lr}
+ffff04de:	2203      	movs	r2, #3
+ffff04e0:	4c1d      	ldr	r4, [pc, #116]	; (ffff0558 <preloader_console_init+0x80>)
+ffff04e2:	2007      	movs	r0, #7
+ffff04e4:	6059      	str	r1, [r3, #4]
+ffff04e6:	611a      	str	r2, [r3, #16]
+ffff04e8:	6098      	str	r0, [r3, #8]
+ffff04ea:	2083      	movs	r0, #131	; 0x83
+ffff04ec:	60d8      	str	r0, [r3, #12]
+ffff04ee:	2036      	movs	r0, #54	; 0x36
+ffff04f0:	6018      	str	r0, [r3, #0]
+ffff04f2:	4620      	mov	r0, r4
+ffff04f4:	6059      	str	r1, [r3, #4]
+ffff04f6:	60da      	str	r2, [r3, #12]
+ffff04f8:	f7ff ffac 	bl	ffff0454 <Console_puts>
+ffff04fc:	4620      	mov	r0, r4
+ffff04fe:	f7ff ffa9 	bl	ffff0454 <Console_puts>
+ffff0502:	4816      	ldr	r0, [pc, #88]	; (ffff055c <preloader_console_init+0x84>)
+ffff0504:	f7ff ffa6 	bl	ffff0454 <Console_puts>
+ffff0508:	4815      	ldr	r0, [pc, #84]	; (ffff0560 <preloader_console_init+0x88>)
+ffff050a:	f7ff ffa3 	bl	ffff0454 <Console_puts>
+ffff050e:	4620      	mov	r0, r4
+ffff0510:	f7ff ffa0 	bl	ffff0454 <Console_puts>
+ffff0514:	4813      	ldr	r0, [pc, #76]	; (ffff0564 <preloader_console_init+0x8c>)
+ffff0516:	f7ff ff9d 	bl	ffff0454 <Console_puts>
+ffff051a:	4813      	ldr	r0, [pc, #76]	; (ffff0568 <preloader_console_init+0x90>)
+ffff051c:	f7ff ff9a 	bl	ffff0454 <Console_puts>
+ffff0520:	4620      	mov	r0, r4
+ffff0522:	f7ff ff97 	bl	ffff0454 <Console_puts>
+ffff0526:	4811      	ldr	r0, [pc, #68]	; (ffff056c <preloader_console_init+0x94>)
+ffff0528:	f7ff ff94 	bl	ffff0454 <Console_puts>
+ffff052c:	4810      	ldr	r0, [pc, #64]	; (ffff0570 <preloader_console_init+0x98>)
+ffff052e:	f7ff ff91 	bl	ffff0454 <Console_puts>
+ffff0532:	4810      	ldr	r0, [pc, #64]	; (ffff0574 <preloader_console_init+0x9c>)
+ffff0534:	f7ff ff8e 	bl	ffff0454 <Console_puts>
+ffff0538:	480f      	ldr	r0, [pc, #60]	; (ffff0578 <preloader_console_init+0xa0>)
+ffff053a:	f7ff ff8b 	bl	ffff0454 <Console_puts>
+ffff053e:	480f      	ldr	r0, [pc, #60]	; (ffff057c <preloader_console_init+0xa4>)
+ffff0540:	f7ff ff88 	bl	ffff0454 <Console_puts>
+ffff0544:	4620      	mov	r0, r4
+ffff0546:	f7ff ff85 	bl	ffff0454 <Console_puts>
+ffff054a:	4620      	mov	r0, r4
+ffff054c:	e8bd 4010 	ldmia.w	sp!, {r4, lr}
+ffff0550:	f7ff bf80 	b.w	ffff0454 <Console_puts>
+ffff0554:	ffc02000 	.word	0xffc02000
+ffff0558:	ffff06ad 	.word	0xffff06ad
+ffff055c:	ffff0584 	.word	0xffff0584
+ffff0560:	ffff05b3 	.word	0xffff05b3
+ffff0564:	ffff05f2 	.word	0xffff05f2
+ffff0568:	ffff0624 	.word	0xffff0624
+ffff056c:	ffff063d 	.word	0xffff063d
+ffff0570:	ffff067c 	.word	0xffff067c
+ffff0574:	ffff06b0 	.word	0xffff06b0
+ffff0578:	ffff06e3 	.word	0xffff06e3
+ffff057c:	ffff0715 	.word	0xffff0715
+
+ffff0580 <spl_relocate_stack_gd>:
+ffff0580:	2000      	movs	r0, #0
+ffff0582:	4770      	bx	lr

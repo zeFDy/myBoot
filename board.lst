@@ -1,0 +1,8 @@
+
+board.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.s_init:
+
+00000000 <s_init>:
+   0:	4770      	bx	lr
