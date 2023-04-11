@@ -42,3 +42,4 @@ myBoot.o:			start.o lowlevel_init.o board.o socfpga_spl.o spl.o
 					$(LD) -o myBoot.o start.o lowlevel_init.o board.o socfpga_spl.o spl.o -T myBoot.lds
 					$(CP) -O binary myBoot.o myBoot.bin
 					$(OD) -d myBoot.o >myBoot.lst
+					./bin2img myBoot.bin myBoot.img
